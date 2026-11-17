@@ -1,10 +1,18 @@
-var searchOn    = true;
-var searchTerms = new String[] { "/billing" };
-
 var onlyHighlighted = false;
+var skipOptions     = true;
+var onlyOptions     = false;
 
-var skipOptions = false;
-var onlyOptions = false;
+var searchOn    = true;
+var searchTerms = new String[] {
+    "/api",
+    "/v3"
+};
+
+var hidePathsOn = true;
+var hidePaths = new String[] {
+    "/billing",
+    "/videos"
+};
 
 var showExtOn = false;
 var showExt   = new String[] { "asp", "aspx", "jsp", "php" };
@@ -26,7 +34,7 @@ var mimeBinary = false;
 var mimeText   = true;
 var mimeImages = false;
 
-// ============ request data ============
+// ==================== request data ====================
 var req    = requestResponse.request();
 var res    = requestResponse.response();
 var method = req.method();
@@ -35,13 +43,16 @@ var path   = req.pathWithoutQuery().toLowerCase();
 var file   = path.substring(path.lastIndexOf('/') + 1);
 var ext    = file.contains(".") ? file.substring(file.lastIndexOf('.') + 1) : "";
 
-// ============ filters ============
+// ==================== filters ====================
 if (skipOptions && method.equalsIgnoreCase("OPTIONS")) return false;
 if (onlyOptions && !method.equalsIgnoreCase("OPTIONS")) return false;
 
-if (searchOn  && Arrays.stream(searchTerms).noneMatch(url::contains)) return false;
+if (searchOn && Arrays.stream(searchTerms).noneMatch(url::contains)) return false;
+
 if (showExtOn && !Arrays.asList(showExt).contains(ext)) return false;
-if (hideExtOn && Arrays.asList(hideExt).contains(ext)) return false;
+if (hideExtOn && Arrays.asList(hideExt).contains(ext))   return false;
+
+if (hidePathsOn && Arrays.stream(hidePaths).anyMatch(path::startsWith)) return false;
 
 if (onlyHighlighted && !requestResponse.annotations().hasHighlightColor()) return false;
 
