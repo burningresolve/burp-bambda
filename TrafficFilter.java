@@ -34,7 +34,6 @@ var mimeBinary = false;
 var mimeText   = true;
 var mimeImages = false;
 
-// ==================== request data ====================
 var req    = requestResponse.request();
 var res    = requestResponse.response();
 var method = req.method();
@@ -43,7 +42,7 @@ var path   = req.pathWithoutQuery().toLowerCase();
 var file   = path.substring(path.lastIndexOf('/') + 1);
 var ext    = file.contains(".") ? file.substring(file.lastIndexOf('.') + 1) : "";
 
-// ==================== filters ====================
+
 if (skipOptions && method.equalsIgnoreCase("OPTIONS")) return false;
 if (onlyOptions && !method.equalsIgnoreCase("OPTIONS")) return false;
 
