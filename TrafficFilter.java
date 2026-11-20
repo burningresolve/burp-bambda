@@ -42,7 +42,6 @@ var path   = req.pathWithoutQuery().toLowerCase();
 var file   = path.substring(path.lastIndexOf('/') + 1);
 var ext    = file.contains(".") ? file.substring(file.lastIndexOf('.') + 1) : "";
 
-
 if (skipOptions && method.equalsIgnoreCase("OPTIONS")) return false;
 if (onlyOptions && !method.equalsIgnoreCase("OPTIONS")) return false;
 
@@ -51,7 +50,7 @@ if (searchOn && Arrays.stream(searchTerms).noneMatch(url::contains)) return fals
 if (showExtOn && !Arrays.asList(showExt).contains(ext)) return false;
 if (hideExtOn && Arrays.asList(hideExt).contains(ext))   return false;
 
-if (hidePathsOn && Arrays.stream(hidePaths).anyMatch(path::startsWith)) return false;
+if (hidePathsOn && Arrays.stream(hidePaths).anyMatch(p -> path.startsWith(p.toLowerCase()))) return false;
 
 if (onlyHighlighted && !requestResponse.annotations().hasHighlightColor()) return false;
 
